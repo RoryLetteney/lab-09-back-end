@@ -28,12 +28,22 @@ app.get('/weather', (req, res) => {
   getQuery(req, res, Weather.fetchWeather, 'weather', 'location_id');
 });
 
+const timeouts = {
+  weather: 15 * 1000
+};
+
 const getQuery = (req, res, callback, table, tableQuery) => {
   const queryHandler = {
     query: req.query.data,
     cacheHit: results => {
-      console.log('Got data from sql');
-      res.send(results.rows[0]);
+      let ageOfResults = (Date.now() - results[0].time);
+      if (ageOfResults > timeouts.weather) {
+        deleteById('weather', results.row[0].id);
+        queryHandler.cacheMiss();
+      } else {
+        console.log('Got data from sql');
+        res.send(results.rows[0]);
+      }
     },
     cacheMiss: () => {
       console.log('No data from sql');
@@ -151,3 +161,8 @@ Weather.prototype.save = function(locationID) {
 app.listen(PORT, () => console.log(`App is up and running on ${PORT}`));
 
 const errorHandler = (res, status, message) => res.send({ status, message });
+
+function deleteById(table, id) {
+  const SQL = `DELETE FROM ${table} WHERE id=${id}`;
+  return client.query(SQL);
+}
