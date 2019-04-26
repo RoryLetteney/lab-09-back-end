@@ -36,10 +36,15 @@ const getQuery = (req, res, callback, table, tableQuery) => {
   const queryHandler = {
     query: req.query.data,
     cacheHit: results => {
-      let ageOfResults = (Date.now() - results[0].time);
-      if (ageOfResults > timeouts.weather) {
-        deleteById('weather', results.row[0].id);
-        queryHandler.cacheMiss();
+      if (table === 'weather') {
+        let ageOfResults = (Date.now() - results[0].time);
+        if (ageOfResults > timeouts.weather) {
+          deleteById('weather', results.row[0].id);
+          queryHandler.cacheMiss();
+        } else {
+          console.log('Got data from sql');
+          res.send(results.rows[0]);
+        }
       } else {
         console.log('Got data from sql');
         res.send(results.rows[0]);

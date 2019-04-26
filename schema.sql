@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS locations, weather;
+
 CREATE TABLE locations (
   id SERIAL PRIMARY KEY,
   search_query VARCHAR(255),
