@@ -33,6 +33,7 @@ app.get('/movies', (req, res) => {
   getQuery(req, res, Movies.fetchMovies, 'movies', 'location_id');
 });
 
+// HANDLERS
 const timeouts = {
   weather: 15 * 1000
 };
@@ -65,24 +66,6 @@ const getQuery = (req, res, callback, table, tableQuery) => {
   lookupData(queryHandler, table, tableQuery);
 };
 
-// CREATE A NEW LOCATION OBJECT FOR THE USER'S QUERY
-// const searchToLatLong = (request, response) => {
-//   let url = `https://maps.googleapis.com/maps/api/geocode/json?address=${request}&key=${GEOCODE_API_KEY}`;
-//   return superagent.get(url)
-//     .then(res => {
-//       response.send(new Location(request, res));
-//     }).catch(error => {
-//       response.status(500).send('Please enter a valid location!');
-//     });
-// };
-
-function Location(query, res) {
-  this.query = query,
-  this.formatted_query = res.formatted_address,
-  this.latitude = res.geometry.location.lat,
-  this.longitude = res.geometry.location.lng;
-}
-
 const lookupData = (handler, table, tableQuery) => {
   const SQL = `SELECT * FROM ${table} WHERE ${tableQuery}=$1;`;
   const values = [table === 'locations' ? handler.query : handler.query.id];
@@ -98,6 +81,19 @@ const lookupData = (handler, table, tableQuery) => {
       console.log(error);
     });
 };
+
+const deleteById = (table, id) => {
+  const SQL = `DELETE FROM ${table} WHERE id=${id}`;
+  return client.query(SQL);
+};
+
+// LOCATION ROUTE COMPONENTS
+function Location(query, res) {
+  this.query = query,
+  this.formatted_query = res.formatted_address,
+  this.latitude = res.geometry.location.lat,
+  this.longitude = res.geometry.location.lng;
+}
 
 Location.fetchLocation = query => {
   const URL = `https://maps.googleapis.com/maps/api/geocode/json?address=${query}&key=${GEOCODE_API_KEY}`;
@@ -126,18 +122,7 @@ Location.prototype.save = function() {
   return client.query(SQL, values);
 };
 
-// RETURN ALL WEATHER RECORDS FOR THE USER'S LOCATION QUERY
-// const getWeather = (request, response) => {
-//   const url = `https://api.darksky.net/forecast/${WEATHER_API_KEY}/${request.query.lat},${request.query.lng}`;
-//   return superagent.get(url)
-//     .then(res => {
-//       const weatherArray = res.body.daily.data.map(day => new Weather(day));
-//       response.send(weatherArray);
-//     }).catch(error => {
-//       response.status(500).send('Please enter a valid location!');
-//     });
-// };
-
+// WEATHER ROUTE COMPONENTS
 function Weather(day) {
   this.forecast = day.summary,
   this.time = new Date(day.time * 1000).toString().slice(0, 15);
@@ -169,10 +154,3 @@ Weather.prototype.save = function(locationID) {
 };
 
 app.listen(PORT, () => console.log(`App is up and running on ${PORT}`));
-
-const errorHandler = (res, status, message) => res.send({ status, message });
-
-function deleteById(table, id) {
-  const SQL = `DELETE FROM ${table} WHERE id=${id}`;
-  return client.query(SQL);
-}
