@@ -28,6 +28,11 @@ app.get('/weather', (req, res) => {
   getQuery(req, res, Weather.fetchWeather, 'weather', 'location_id');
 });
 
+// CREATE MOVIES ROUTE
+app.get('/movies', (req, res) => {
+  getQuery(req, res, Movies.fetchMovies, 'movies', 'location_id');
+});
+
 const timeouts = {
   weather: 15 * 1000
 };
