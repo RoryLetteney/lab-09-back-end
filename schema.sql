@@ -32,3 +32,6 @@ CREATE TABLE movies (
   created_at BIGINT,
   FOREIGN KEY (location_id) REFERENCES locations (id)
 );
+
+GRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO deltav;
+GRANT ALL PRIVILEGES ON ALL SEQUENCES IN SCHEMA public TO deltav;

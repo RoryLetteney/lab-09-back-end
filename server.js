@@ -42,13 +42,20 @@ const getQuery = (req, res, callback, table, tableQuery) => {
   const queryHandler = {
     query: req.query.data,
     cacheHit: results => {
-      let ageOfResults = (Date.now() - results[0].created_at);
-      if (ageOfResults > timeouts.weather) {
-        deleteById('weather', results.row[0].id);
-        queryHandler.cacheMiss();
+      if (table === 'weather') {
+        results.rows.forEach(row => {
+          let ageOfResults = (Date.now() - row.created_at);
+          if (ageOfResults > timeouts.weather) {
+            deleteById('weather', row.id);
+            queryHandler.cacheMiss();
+          } else {
+            console.log('Got data from sql');
+            res.send(row);
+          }
+        });
       } else {
         console.log('Got data from sql');
-        res.send(results.rows[0]);
+        res.send(results.rows);
       }
     },
     cacheMiss: () => {
@@ -63,7 +70,7 @@ const getQuery = (req, res, callback, table, tableQuery) => {
 
 const lookupData = (handler, table, tableQuery) => {
   const SQL = `SELECT * FROM ${table} WHERE ${tableQuery}=$1;`;
-  const values = [table === 'locations' ? handler.query : handler.query.id];
+  const values = [table === 'weather' ? handler.query.id : handler.query];
 
   return client.query(SQL, values)
     .then(results => {
