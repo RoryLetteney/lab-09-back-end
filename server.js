@@ -9,6 +9,7 @@ const express = require('express'),
   PORT = process.env.PORT || 3000,
   WEATHER_API_KEY = process.env.WEATHER_API_KEY,
   GEOCODE_API_KEY = process.env.GEOCODE_API_KEY,
+  MOVIE_API_KEY = process.env.MOVIE_API_KEY,
   DATABASE_URL = process.env.DATABASE_URL;
 
 app.use(cors());
@@ -30,7 +31,8 @@ app.get('/weather', (req, res) => {
 
 // CREATE MOVIES ROUTE
 app.get('/movies', (req, res) => {
-  getQuery(req, res, Movies.fetchMovies, 'movies', 'location_id');
+  // getQuery(req, res, Movie.fetchMovies, 'movies', 'location_id');
+  Movie.fetchMovies();
 });
 
 // HANDLERS
@@ -151,6 +153,27 @@ Weather.prototype.save = function(locationID) {
   let values = Object.values(this);
   values.push(locationID);
   return client.query(SQL, values);
+};
+
+// MOVIES ROUTE COMPONENTS
+function Movie(location, res) {
+  this.title = res.title,
+  this.overview = res.overview,
+  this.average_votes = res.vote_average,
+  this.total_votes = res.vote_count,
+  this.image_url = res.homepage + res.poster_path,
+  this.popularity = res.popularity,
+  this.released_on = res.release_date;
+}
+
+Movie.fetchMovies = query => {
+  const URL = `https://api.themoviedb.org/3/movie/76341?api_key=${MOVIE_API_KEY}`;
+
+  return superagent.get(URL)
+    .then(res => {
+      console.log('Got something from TMDb!');
+      return console.log(res.body);
+    });
 };
 
 app.listen(PORT, () => console.log(`App is up and running on ${PORT}`));
