@@ -20,7 +20,6 @@ client.on('err', err => console.log(err));
 
 // CREATE LOCATION ROUTE
 app.get('/location', (req, res) => {
-  // searchToLatLong(req.query.data, res);
   getQuery(req, res, Location.fetchLocation, 'locations', 'search_query');
 });
 
@@ -31,8 +30,7 @@ app.get('/weather', (req, res) => {
 
 // CREATE MOVIES ROUTE
 app.get('/movies', (req, res) => {
-  // getQuery(req, res, Movie.fetchMovies, 'movies', 'location_id');
-  Movie.fetchMovies();
+  getQuery(req, res, Movie.fetchMovies, 'movies', 'location_id');
 });
 
 // HANDLERS
@@ -44,15 +42,10 @@ const getQuery = (req, res, callback, table, tableQuery) => {
   const queryHandler = {
     query: req.query.data,
     cacheHit: results => {
-      if (table === 'weather') {
-        let ageOfResults = (Date.now() - results[0].time);
-        if (ageOfResults > timeouts.weather) {
-          deleteById('weather', results.row[0].id);
-          queryHandler.cacheMiss();
-        } else {
-          console.log('Got data from sql');
-          res.send(results.rows[0]);
-        }
+      let ageOfResults = (Date.now() - results[0].created_at);
+      if (ageOfResults > timeouts.weather) {
+        deleteById('weather', results.row[0].id);
+        queryHandler.cacheMiss();
       } else {
         console.log('Got data from sql');
         res.send(results.rows[0]);
@@ -60,7 +53,7 @@ const getQuery = (req, res, callback, table, tableQuery) => {
     },
     cacheMiss: () => {
       console.log('No data from sql');
-      callback(req.query.data)
+      callback(queryHandler.query)
         .then(data => res.send(data));
     }
   };
@@ -94,7 +87,8 @@ function Location(query, res) {
   this.query = query,
   this.formatted_query = res.formatted_address,
   this.latitude = res.geometry.location.lat,
-  this.longitude = res.geometry.location.lng;
+  this.longitude = res.geometry.location.lng,
+  this.created_at = Date.now();
 }
 
 Location.fetchLocation = query => {
@@ -119,7 +113,7 @@ Location.fetchLocation = query => {
 };
 
 Location.prototype.save = function() {
-  const SQL = `INSERT INTO locations (search_query, formatted_query, latitude, longitude) VALUES($1,$2,$3,$4) RETURNING id`;
+  const SQL = `INSERT INTO locations (search_query, formatted_query, latitude, longitude, created_at) VALUES($1,$2,$3,$4,$5) RETURNING id`;
   let values = Object.values(this);
   return client.query(SQL, values);
 };
@@ -127,12 +121,12 @@ Location.prototype.save = function() {
 // WEATHER ROUTE COMPONENTS
 function Weather(day) {
   this.forecast = day.summary,
-  this.time = new Date(day.time * 1000).toString().slice(0, 15);
+  this.time = new Date(day.time * 1000).toString().slice(0, 15),
+  this.created_at = Date.now();
 }
 
 Weather.fetchWeather = query => {
-  const URL = `https://api.darksky.net/forecast/${WEATHER_API_KEY}/${query.lat},${query.lng}`;
-
+  const URL = `https://api.darksky.net/forecast/${WEATHER_API_KEY}/${query.latitude},${query.longitude}`;
   return superagent.get(URL)
     .then(res => {
       console.log('Got something from Dark Sky!');
@@ -145,11 +139,13 @@ Weather.fetchWeather = query => {
           return forecast;
         });
       }
+    }).catch(error => {
+      console.log(error);
     });
 };
 
 Weather.prototype.save = function(locationID) {
-  const SQL = `INSERT INTO weather (forecast, time, location_id) VALUES($1,$2,$3) RETURNING id`;
+  const SQL = `INSERT INTO weather (forecast, time, created_at, location_id) VALUES($1,$2,$3,$4) RETURNING id`;
   let values = Object.values(this);
   values.push(locationID);
   return client.query(SQL, values);
@@ -157,23 +153,42 @@ Weather.prototype.save = function(locationID) {
 
 // MOVIES ROUTE COMPONENTS
 function Movie(location, res) {
+  this.location = location,
   this.title = res.title,
   this.overview = res.overview,
   this.average_votes = res.vote_average,
   this.total_votes = res.vote_count,
   this.image_url = res.homepage + res.poster_path,
   this.popularity = res.popularity,
-  this.released_on = res.release_date;
+  this.released_on = res.release_date,
+  this.created_at = Date.now();
 }
 
 Movie.fetchMovies = query => {
-  const URL = `https://api.themoviedb.org/3/movie/76341?api_key=${MOVIE_API_KEY}`;
+  const URL = `https://api.themoviedb.org/3/search/movie?api_key=${MOVIE_API_KEY}&language=en-US&query=${query.query}`;
 
   return superagent.get(URL)
     .then(res => {
       console.log('Got something from TMDb!');
-      return console.log(res.body);
+      if (!res.body.results.length) {
+        throw 'No data from TMDb';
+      } else {
+        return res.body.results.map(movie => {
+          const newMovie = new Movie(query.query, movie);
+          newMovie.save(query.id);
+          return newMovie;
+        });
+      }
+    }).catch(error => {
+      console.log(error);
     });
+};
+
+Movie.prototype.save = function(locationID) {
+  const SQL = `INSERT INTO movies (location, title, overview, average_votes, total_votes, image_url, popularity, released_on, created_at, location_id) VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10) RETURNING id`;
+  let values = Object.values(this);
+  values.push(locationID);
+  return client.query(SQL, values);
 };
 
 app.listen(PORT, () => console.log(`App is up and running on ${PORT}`));
