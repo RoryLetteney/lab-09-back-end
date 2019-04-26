@@ -35,24 +35,28 @@ app.get('/movies', (req, res) => {
 
 // HANDLERS
 const timeouts = {
-  weather: 15 * 1000
+  weather: 15 * 1000,
+  movies: 15 * 1000
 };
 
 const getQuery = (req, res, callback, table, tableQuery) => {
   const queryHandler = {
     query: req.query.data,
     cacheHit: results => {
-      if (table === 'weather') {
-        results.rows.forEach(row => {
-          let ageOfResults = (Date.now() - row.created_at);
-          if (ageOfResults > timeouts.weather) {
+      if (table === 'locations') {
+        console.log('Got data from sql');
+        res.send(results.rows);
+      } else if (table === 'weather') {
+        let ageOfResults = (Date.now() - results.rows[0].created_at);
+        if (ageOfResults > timeouts.weather) {
+          results.rows.forEach(row => {
             deleteById('weather', row.id);
-            queryHandler.cacheMiss();
-          } else {
-            console.log('Got data from sql');
-            res.send(row);
-          }
-        });
+          });
+          queryHandler.cacheMiss();
+        } else {
+          console.log('Got data from sql');
+          res.send(results.rows);
+        }
       } else {
         console.log('Got data from sql');
         res.send(results.rows);
@@ -70,7 +74,7 @@ const getQuery = (req, res, callback, table, tableQuery) => {
 
 const lookupData = (handler, table, tableQuery) => {
   const SQL = `SELECT * FROM ${table} WHERE ${tableQuery}=$1;`;
-  const values = [table === 'weather' ? handler.query.id : handler.query];
+  const values = [(table === 'weather' || table === 'movies') ? handler.query.id : handler.query];
 
   return client.query(SQL, values)
     .then(results => {
