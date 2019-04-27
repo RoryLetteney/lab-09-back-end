@@ -10,6 +10,7 @@ const express = require('express'),
   WEATHER_API_KEY = process.env.WEATHER_API_KEY,
   GEOCODE_API_KEY = process.env.GEOCODE_API_KEY,
   MOVIE_API_KEY = process.env.MOVIE_API_KEY,
+  YELP_API_KEY = process.env.YELP_API_KEY,
   DATABASE_URL = process.env.DATABASE_URL;
 
 app.use(cors());
@@ -33,6 +34,11 @@ app.get('/movies', (req, res) => {
   getQuery(req, res, Movie.fetchMovies, 'movies', 'location_id');
 });
 
+// CREATE YELP ROUTE
+app.get('/yelp', (req, res) => {
+  getQuery(req, res, Restaurant.fetchRestaurants, 'restaurants', 'location_id');
+});
+
 // HANDLERS
 const timeouts = {
   weather: 15 * 1000,
@@ -43,10 +49,7 @@ const getQuery = (req, res, callback, table, tableQuery) => {
   const queryHandler = {
     query: req.query.data,
     cacheHit: results => {
-      if (table === 'locations') {
-        console.log('Got data from sql');
-        res.send(results.rows);
-      } else if (table === 'weather') {
+      if (table === 'weather') {
         let ageOfResults = (Date.now() - results.rows[0].created_at);
         if (ageOfResults > timeouts.weather) {
           results.rows.forEach(row => {
@@ -69,7 +72,8 @@ const getQuery = (req, res, callback, table, tableQuery) => {
     }
   };
 
-  lookupData(queryHandler, table, tableQuery);
+  // lookupData(queryHandler, table, tableQuery);
+  queryHandler.cacheMiss();
 };
 
 const lookupData = (handler, table, tableQuery) => {
@@ -200,6 +204,27 @@ Movie.prototype.save = function(locationID) {
   let values = Object.values(this);
   values.push(locationID);
   return client.query(SQL, values);
+};
+
+// YELP ROUTE COMPONENTS
+function Restaurant(res) {
+  this.name = res.name,
+  this.image_url = res.image_url,
+  this.price = res.price,
+  this.rating = res.rating,
+  this.url = res.url;
+}
+
+Restaurant.fetchRestaurants = query => {
+  const URL = `https://api.yelp.com/v3/businesses/search?location=chicago&limit=20`;
+
+  return superagent.get(URL)
+    .set('Authorization', `Bearer ${YELP_API_KEY}`)
+    .then(res => {
+      return res.body.businesses.map(business => {
+        return new Restaurant(business);
+      });
+    });
 };
 
 app.listen(PORT, () => console.log(`App is up and running on ${PORT}`));
