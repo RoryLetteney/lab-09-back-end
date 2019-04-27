@@ -9,6 +9,29 @@ This application takes in user input in the form of a city name, and returns the
 ## Getting Started
 To use this app:
 > npm install
+> npm start
+> Open localhost:3000 in your browser
+
+To use the location route:
+> /location?data=[location]
+Examples:
+> /location?data=chicago
+> /location?data=415 12th Ave, Cedar Rapids, IA
+
+To use the weather route:
+> /weather?data[latitude]=[location's latitude]&data[location's longitude]=longitude&data[id]=[location's database id]
+Example:
+> /weather?data[latitude]=41.8781136&data[longitude]=-87.6297982&data[id]=1
+
+To use the movies route:
+> /movies?data[query]=[location]&data[id]=[location's database id]
+Example:
+> /movies?data[query]=chicago&data[id]=1
+
+To use the yelp route:
+> /yelp?data[query]=[location]&data[id]=[location's database id]
+Example:
+> /yelp?data[query]=chicago&data[id]=1
 
 ## Architecture
 We are using JavaScript, NodeJS, Express, and CORS. Using NodeJS we send a request to the Dark Sky API and Google Maps API to retrieve the weather data for a user's query.
