@@ -7,36 +7,36 @@
 This application takes in user input in the form of a URL query and returns information depending upon the route accessed. Current routes include `location`, `weather`, `movies`, and `yelp`.
 
 ## Getting Started
-To use this app:
+**To use this app:**
 > `npm install`\
 > `npm start`\
 > Open `localhost:3000` in your browser\
 > Enter a route, `localhost:3000/[route]`
 
-To use the location route:\
+**To use the location route:**\
 `/location?data=[location]`
 
-Examples:\
-`/location?data=chicago`\
-`/location?data=415 12th Ave, Cedar Rapids, IA`
+> *Examples:*\
+> `/location?data=chicago`\
+> `/location?data=415 12th Ave, Cedar Rapids, IA`
 
-To use the weather route:\
+**To use the weather route:**\
 `/weather?data[latitude]=[location's latitude]&data[location's longitude]=longitude&data[id]=[location's database id]`
 
-Example:\
-`/weather?data[latitude]=41.8781136&data[longitude]=-87.6297982&data[id]=1`
+> *Example:*\
+> `/weather?data[latitude]=41.8781136&data[longitude]=-87.6297982&data[id]=1`
 
-To use the movies route:\
+**To use the movies route:**\
 `/movies?data[query]=[location]&data[id]=[location's database id]`
 
-Example:\
-`/movies?data[query]=chicago&data[id]=1`
+> *Example:*\
+> `/movies?data[query]=chicago&data[id]=1`
 
-To use the yelp route:\
+**To use the yelp route:**\
 `/yelp?data[query]=[location]&data[id]=[location's database id]`
 
-Example:\
-`/yelp?data[query]=chicago&data[id]=1`
+> *Example:*\
+> `/yelp?data[query]=chicago&data[id]=1`
 
 ## Architecture
 We are using JavaScript, NodeJS, Express, PostgreSQL, and CORS. Using NodeJS we first check PostgreSQL for existing data, and if none is found we make a request to the various APIs and store the data in the database. The requested information is then served to the user.
