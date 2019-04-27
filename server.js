@@ -41,19 +41,21 @@ app.get('/yelp', (req, res) => {
 
 // HANDLERS
 const timeouts = {
-  weather: 15 * 1000,
-  movies: 15 * 1000
+  'weather': 15 * 1000,
+  'movies': 15 * 1000,
+  'restaurants': 15 * 1000
 };
 
 const getQuery = (req, res, callback, table, tableQuery) => {
   const queryHandler = {
     query: req.query.data,
     cacheHit: results => {
-      if (table === 'weather') {
+      if (table !== 'locations') {
         let ageOfResults = (Date.now() - results.rows[0].created_at);
-        if (ageOfResults > timeouts.weather) {
+        if (ageOfResults > timeouts[table]) {
           results.rows.forEach(row => {
-            deleteById('weather', row.id);
+            console.log('Deleting data');
+            deleteById(table, row.id);
           });
           queryHandler.cacheMiss();
         } else {
@@ -226,6 +228,8 @@ Restaurant.fetchRestaurants = query => {
         restaurant.save(query.id);
         return restaurant;
       });
+    }).catch(error => {
+      console.log(error);
     });
 };
 

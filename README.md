@@ -123,6 +123,16 @@ Estimate of time needed to complete: 2 hours
 
 Start time: 8:57am
 
-End time:
+End time: 10:12am
 
-Actual time needed to complete:
+Actual time needed to complete: 1 hour, 15 minutes
+
+Number and name of feature: Feature #11: Refactor timeout to be dynamic
+
+Estimate of time needed to complete: 30 minutes
+
+Start time: 10:18am
+
+End time: 10:24am
+
+Actual time needed to complete: 6 minutes
