@@ -1,7 +1,7 @@
 # Project Name
 
 **Author**: Rory Letteney
-**Version**: 1.0.6
+**Version**: 4.1.0
 
 ## Overview
 This application takes in user input in the form of a city name, and returns the weather for said location.
@@ -48,6 +48,8 @@ APIs used include:
 04-24-2019 1:59pm - Application now has fully-functional calls to the Google Maps and Dark Sky APIs. Returns valid data dependant upon user input.
 
 04-26-2019 1:59pm - Application now has a fully-functional call to the TMDb API. Returns valid data dependant upon user input.
+
+04-27-2019 11:02am - Application now has a fully-functional call to the Yelp API. Returns valid data dependant upon user input.
 
 ## Credits and Collaborations
 Michele Saba - https://github.com/MicheleSaba
