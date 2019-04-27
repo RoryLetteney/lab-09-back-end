@@ -18,10 +18,13 @@ We are using JavaScript, NodeJS, Express, and CORS. Using NodeJS we send a reque
 
 04-24-2019 1:59pm - Application now has fully-functional calls to the Google Maps and Dark Sky APIs. Returns valid data dependant upon user input.
 
+04-26-2019 1:59pm - Application now has a fully-functional call to the TMDb API. Returns valid data dependant upon user input.
+
 ## Credits and Collaborations
 Michele Saba - https://github.com/MicheleSaba
 Floyd Orr - https://github.com/virtualmason
-David
+Skylar Monahan - https://github.com/kmons2000
+David Becker - https://github.com/Meepedy
 
 
 Number and name of feature: Feature #1: Location Route
@@ -82,14 +85,44 @@ Start time: 9:00am
 
 Finish time: 10:00am
 
-Actual time needed to complete: 45 minutes
+Actual time needed to complete: 1 hour
 
-Number and name of feature: Feature #5: Convert Weather route to use API call
+Number and name of feature: Feature #7: Check for SQL data first before API calls
 
-Estimate of time needed to complete: 1 hour
+Estimate of time needed to complete: 3 hours
 
-Start time: 12:30pm
+Start time: 10:00am
 
 Finish time: 1:15pm
 
-Actual time needed to complete: 45 minutes
+Actual time needed to complete: 3 hours, 15 minutes
+
+Number and name of feature: Feature #8: Movies route, SQL table setup, and TMDb API call
+
+Estimate of time needed to complete: 2 hours
+
+Start time: 8:45am
+
+End time: 10:30am
+
+Actual time needed to complete: 1 hour, 45 minutes
+
+Number and name of feature: Feature #9: Timeout
+
+Estimate of time needed to complete: 30 minutes
+
+Start time: 12:30pm
+
+End time: 1:55pm
+
+Actual time needed to complete: 1 hour, 25 minutes
+
+Number and name of feature: Feature #10: Yelp route, SQL table setup, and Yelp API call
+
+Estimate of time needed to complete: 2 hours
+
+Start time: 8:57am
+
+End time:
+
+Actual time needed to complete:
