@@ -14,22 +14,26 @@ To use this app:
 
 To use the location route:
 > /location?data=[location]
+
 Examples:
 > /location?data=chicago
 > /location?data=415 12th Ave, Cedar Rapids, IA
 
 To use the weather route:
 > /weather?data[latitude]=[location's latitude]&data[location's longitude]=longitude&data[id]=[location's database id]
+
 Example:
 > /weather?data[latitude]=41.8781136&data[longitude]=-87.6297982&data[id]=1
 
 To use the movies route:
 > /movies?data[query]=[location]&data[id]=[location's database id]
+
 Example:
 > /movies?data[query]=chicago&data[id]=1
 
 To use the yelp route:
 > /yelp?data[query]=[location]&data[id]=[location's database id]
+
 Example:
 > /yelp?data[query]=chicago&data[id]=1
 
@@ -53,8 +57,11 @@ APIs used include:
 
 ## Credits and Collaborations
 Michele Saba - https://github.com/MicheleSaba
+
 Floyd Orr - https://github.com/virtualmason
+
 Skylar Monahan - https://github.com/kmons2000
+
 David Becker - https://github.com/Meepedy
 
 ## Feature Time Estimates
