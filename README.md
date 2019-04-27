@@ -57,7 +57,9 @@ Floyd Orr - https://github.com/virtualmason
 Skylar Monahan - https://github.com/kmons2000
 David Becker - https://github.com/Meepedy
 
+## Feature Time Estimates
 
+### Feature #1
 Number and name of feature: Feature #1: Location Route
 
 Estimate of time needed to complete: 1 hour
@@ -68,6 +70,7 @@ Finish time: 10:15am
 
 Actual time needed to complete: 39 minutes
 
+### Feature #2
 Number and name of feature: Feature #2: Weather Route
 
 Estimate of time needed to complete: 1 hour
@@ -78,6 +81,7 @@ Finish time: 10:48am
 
 Actual time needed to complete: 33 minutes
 
+### Feature #3
 Number and name of feature: Feature #3: Status 500 Error Handling
 
 Estimate of time needed to complete: 10 minutes
@@ -88,6 +92,7 @@ Finish time: 11:15am
 
 Actual time needed to complete: 10 minutes
 
+### Feature #4
 Number and name of feature: Feature #4: Convert Location route to use API call
 
 Estimate of time needed to complete: ????
@@ -98,6 +103,7 @@ Finish time: 12:30pm
 
 Actual time needed to complete: 3 hours, 30 minutes
 
+### Feature #5
 Number and name of feature: Feature #5: Convert Weather route to use API call
 
 Estimate of time needed to complete: 1 hour
@@ -108,6 +114,7 @@ Finish time: 1:15pm
 
 Actual time needed to complete: 45 minutes
 
+### Feature #6
 Number and name of feature: Feature #6: Database Setup
 
 Estimate of time needed to complete: 1 hour
@@ -118,6 +125,7 @@ Finish time: 10:00am
 
 Actual time needed to complete: 1 hour
 
+### Feature #7
 Number and name of feature: Feature #7: Check for SQL data first before API calls
 
 Estimate of time needed to complete: 3 hours
@@ -128,6 +136,7 @@ Finish time: 1:15pm
 
 Actual time needed to complete: 3 hours, 15 minutes
 
+### Feature #8
 Number and name of feature: Feature #8: Movies route, SQL table setup, and TMDb API call
 
 Estimate of time needed to complete: 2 hours
@@ -138,6 +147,7 @@ End time: 10:30am
 
 Actual time needed to complete: 1 hour, 45 minutes
 
+### Feature #9
 Number and name of feature: Feature #9: Timeout
 
 Estimate of time needed to complete: 30 minutes
@@ -148,6 +158,7 @@ End time: 1:55pm
 
 Actual time needed to complete: 1 hour, 25 minutes
 
+### Feature #10
 Number and name of feature: Feature #10: Yelp route, SQL table setup, and Yelp API call
 
 Estimate of time needed to complete: 2 hours
@@ -158,6 +169,7 @@ End time: 10:12am
 
 Actual time needed to complete: 1 hour, 15 minutes
 
+### Feature #11
 Number and name of feature: Feature #11: Refactor timeout to be dynamic
 
 Estimate of time needed to complete: 30 minutes
