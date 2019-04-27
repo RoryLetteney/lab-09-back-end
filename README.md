@@ -34,7 +34,13 @@ Example:
 > /yelp?data[query]=chicago&data[id]=1
 
 ## Architecture
-We are using JavaScript, NodeJS, Express, and CORS. Using NodeJS we send a request to the Dark Sky API and Google Maps API to retrieve the weather data for a user's query.
+We are using JavaScript, NodeJS, Express, PostgreSQL, and CORS. Using NodeJS we first check PostgreSQL for existing data, and if none is found we make a request to the various APIs and store the data in the database. The requested information is then served to the user.
+
+APIs used include:
+> Google Maps
+> Dark Sky
+> The Movie Database
+> Yelp
 
 ## Change Log
 04-23-2019 1:59pm - Application now has a fully-functional express server, with GET routes for the location resource and weather resource. Also handles status 500 errors.
