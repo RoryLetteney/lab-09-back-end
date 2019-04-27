@@ -1,4 +1,4 @@
-# Project Name
+# Learning APIs and PostgreSQL
 
 **Author**: Rory Letteney
 **Version**: 4.1.0
