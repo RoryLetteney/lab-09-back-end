@@ -72,13 +72,12 @@ const getQuery = (req, res, callback, table, tableQuery) => {
     }
   };
 
-  // lookupData(queryHandler, table, tableQuery);
-  queryHandler.cacheMiss();
+  lookupData(queryHandler, table, tableQuery);
 };
 
 const lookupData = (handler, table, tableQuery) => {
   const SQL = `SELECT * FROM ${table} WHERE ${tableQuery}=$1;`;
-  const values = [(table === 'weather' || table === 'movies') ? handler.query.id : handler.query];
+  const values = [table !== 'locations' ? handler.query.id : handler.query];
 
   return client.query(SQL, values)
     .then(results => {
@@ -212,19 +211,29 @@ function Restaurant(res) {
   this.image_url = res.image_url,
   this.price = res.price,
   this.rating = res.rating,
-  this.url = res.url;
+  this.url = res.url,
+  this.created_at = Date.now();
 }
 
 Restaurant.fetchRestaurants = query => {
-  const URL = `https://api.yelp.com/v3/businesses/search?location=chicago&limit=20`;
+  const URL = `https://api.yelp.com/v3/businesses/search?location=${query.query}&limit=20`;
 
   return superagent.get(URL)
     .set('Authorization', `Bearer ${YELP_API_KEY}`)
     .then(res => {
       return res.body.businesses.map(business => {
-        return new Restaurant(business);
+        const restaurant = new Restaurant(business);
+        restaurant.save(query.id);
+        return restaurant;
       });
     });
+};
+
+Restaurant.prototype.save = function(locationID) {
+  const SQL = `INSERT INTO restaurants (name, image_url, price, rating, url, created_at, location_id) VALUES($1,$2,$3,$4,$5,$6,$7) RETURNING id`;
+  const values = Object.values(this);
+  values.push(locationID);
+  return client.query(SQL, values);
 };
 
 app.listen(PORT, () => console.log(`App is up and running on ${PORT}`));
