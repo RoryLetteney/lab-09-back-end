@@ -4,7 +4,7 @@
 **Version**: 4.1.0
 
 ## Overview
-This application takes in user input in the form of a city name, and returns the weather for said location.
+This application takes in user input in the form of a URL query and returns information depending upon the route accessed. Current routes include `location`, `weather`, `movies`, and `yelp`.
 
 ## Getting Started
 To use this app:
