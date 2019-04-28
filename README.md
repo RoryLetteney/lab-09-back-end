@@ -120,26 +120,26 @@ APIs used include:
 **Number and name of feature:** *Feature #8: Movies route, SQL table setup, and TMDb API call*\
 **Estimate of time needed to complete:** *2 hours*\
 **Start time:** *8:45am*\
-**End time: 10**:*30am*\
+**Finish time:** *10:30am*\
 **Actual time needed to complete:** *1 hour, 45 minutes*
 
 ### Feature #9
 **Number and name of feature:** *Feature #9: Timeout*\
 **Estimate of time needed to complete:** *30 minutes*\
 **Start time:** *12:30pm*\
-**End time: 1:**5*5pm*\
+**Finish time:** *1:55pm*\
 **Actual time needed to complete:** *1 hour, 25 minutes*
 
 ### Feature #10
 **Number and name of feature:** *Feature #10: Yelp route, SQL table setup, and Yelp API call*\
 **Estimate of time needed to complete:** *2 hours*\
 **Start time:** *8:57am*\
-**End time: 10**:*12am*\
+**Finish time:** *10:12am*\
 **Actual time needed to complete:** *1 hour, 15 minutes*
 
 ### Feature #11
 **Number and name of feature:** *Feature #11: Refactor timeout to be dynamic*\
 **Estimate of time needed to complete:** *30 minutes*\
 **Start time:** *10:18am*\
-**End time: 10**:*24am*\
+**Finish time:** *10:24am*\
 **Actual time needed to complete:** *6 minutes*
